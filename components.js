@@ -44,7 +44,6 @@ function initCraftyComponents(){
 	
 	
 	Crafty.c("Player", {
-		
 		init: function(){
 			this.addComponent("2D, Canvas, Color, Box2D, Keyboard, PlayerControls")
 			.playerControls(5)
@@ -92,6 +91,32 @@ function initCraftyComponents(){
 				})
 		}
 	});//end_of_component Player
+		
+		
+	Crafty.c("Chamber", {	
+		init: function(){
+			this.addComponent("2D, Canvas, Color, Box2D")
+			.color("#ff0000")
+			.attr({ 		
+ 				x: SCREEN_WIDTH*0.25,
+ 				y: SCREEN_HEIGHT*0.25,
+				h: 64, 
+				w: 64
+			})
+			.box2d({
+					bodyType: 'static',
+					density : 1.0,
+					friction : 2,
+					restitution : 0.2,
+					shape: 'box',
+					//Filtering data
+					//categoryBits: 0x0001,
+					//maskBits: 0xfffd,
+					//groupIndex: 0,							
+			})
+
+		}
+	});//end_of_component Chamber
 	
 	Crafty.c("Portal",{
 		nextRoom: "undeterminedRoom",
