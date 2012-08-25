@@ -5,16 +5,18 @@ var SCREEN_HEIGHT = 480;
 var	world, PTM_RATIO = 32;
 
 var GAME_PROPERTIES = {
-	PLANT_TYPES: 		[ 'tomato', 'potato', 'carrot', 'artichoke', 'pepper', 'zuchini', 'corn' ],
+	PLANT_TYPES: 		[ 'tomato', 'potato', 'carrot', 'artichoke', 'pepper', 'zuchini', 'corn'],
 	BACKPACK_SLOTS:		5,
 	MAX_SPELLS:			8,
+	ITEM_TYPES: ['sheep','wool','jersey']
+//	{
+//		wolf: ['sheep','wool','jersey'],
+//		door: ['ore', 'iron', 'key']
+//	}
 }
 
 var g_playerProps = {
 	backpack: [],
-	spells: new Array(8),
-	//spells: [{ type: 'spell', name: 'fireball', count: 1 },{ type: 'spell', name: 'iceball', count: 1 }],
-	selectedSpell: 1,
 };
 
 window.onload = function(){
@@ -35,6 +37,7 @@ window.onload = function(){
 	initHUD();
 	
 	testInventory();
+	pushWolfItem();
 	//Load first scene
 	console.log("Run scene:main")
 	Crafty.scene("main");
@@ -61,4 +64,14 @@ function testInventory(){
 		}
 	}
 	alert ('pack full');
+}
+
+function pushWolfItem(){
+	for (var i=0; i<GAME_PROPERTIES.BACKPACK_SLOTS;i++){
+		if(!g_playerProps.backpack[i]){
+			g_playerProps.backpack[i] = { type: 'item', itemType: GAME_PROPERTIES.ITEM_TYPES[0], count: 1 };
+			reOrderBackpack();
+			return;
+		}
+	}
 }

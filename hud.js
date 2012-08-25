@@ -5,6 +5,7 @@ var g_hud = {
 				backpackCounters: [],
 				startX: 0,
 				startY: 0,
+	
 };
 
 function initHUD(){
@@ -18,26 +19,26 @@ function initHUD(){
 	g_hud.mouseCatcher = g_hud.raphPaper.rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 							.attr( { fill: '#fff', opacity: 0 } );
 								
-	g_hud.mouseCatcher.click(function (evt) {
-		var spell = g_playerProps.spells[g_playerProps.selectedSpell-1];
-		if (spell) {
-			var ev = jQuery.event.fix(evt);
-			var pos = jQuery('#raphHolder').position();
-			var craftyX = ev.pageX - pos.left - Crafty.viewport.x - 2;
-			var craftyY = ev.pageY - pos.top - Crafty.viewport.y - 2;
-
-
-			var bolt = Crafty.e('2D, ' + RENDERING_MODE + ', Collision, ' + spell.name)
-				.attr( { x: g_elPlayer.x + 64/2, y: g_elPlayer.y + 64/2, z: g_elPlayer.z } )
-				.collision();
-
-			var dx = craftyX- 16/2 - bolt.x;
-			var dy = craftyY - 16/2 - bolt.y;
-			var angle = Math.atan2(dy, dx);
-
-			moveSpell(bolt, SPELLS[spell.name].speed, SPELLS[spell.name].duration, angle);
-		}
-	});							
+//	g_hud.mouseCatcher.click(function (evt) {
+//		var spell = g_playerProps.spells[g_playerProps.selectedSpell-1];
+//		if (spell) {
+//			var ev = jQuery.event.fix(evt);
+//			var pos = jQuery('#raphHolder').position();
+//			var craftyX = ev.pageX - pos.left - Crafty.viewport.x - 2;
+//			var craftyY = ev.pageY - pos.top - Crafty.viewport.y - 2;
+//
+//
+//			var bolt = Crafty.e('2D, ' + RENDERING_MODE + ', Collision, ' + spell.name)
+//				.attr( { x: g_elPlayer.x + 64/2, y: g_elPlayer.y + 64/2, z: g_elPlayer.z } )
+//				.collision();
+//
+//			var dx = craftyX- 16/2 - bolt.x;
+//			var dy = craftyY - 16/2 - bolt.y;
+//			var angle = Math.atan2(dy, dx);
+//
+//			moveSpell(bolt, SPELLS[spell.name].speed, SPELLS[spell.name].duration, angle);
+//		}
+//	});							
 								
 								
 	//Print backpack inventory	
@@ -97,6 +98,8 @@ function initHUD(){
 		);
 	}
 
+	createInventoryIcons();
+	
 	g_hud.itemHighlight = g_hud.raphPaper.rect(g_hud.startX + 64*1, g_hud.startY,64, 64,2).attr( { stroke: '#ff0' });
 
 
@@ -104,7 +107,20 @@ function initHUD(){
 	g_hud.visible = true;
 	g_hud.setBackpack.attr( { opacity: 1.0 });
 
-			
+	g_hud.evolveItem = function(itemId){
+		if (g_playerProps.backpack[itemId]) {
+			if(g_playerProps.backpack[itemId].type === 'item'){
+				
+				var newItemType = GAME_PROPERTIES.ITEM_TYPES.indexOf(g_playerProps.backpack[itemId].itemType) + 1;
+				if(newItemType == 3){
+					newItemType = 0;
+				}
+				g_playerProps.backpack[itemId] = { type: 'item', itemType: GAME_PROPERTIES.ITEM_TYPES[newItemType], count: 1 };
+				reOrderBackpack();
+				
+			}
+		}
+	}		
 }
 
 // fix for Webkit browsers too fast
@@ -123,11 +139,23 @@ jQuery.fn.aPosition = function() {
 };
 
 function reOrderBackpack() {
-
+	for (var i=0;i<GAME_PROPERTIES.PLANT_TYPES.length;i++) {
+		g_hud.setBackpack.exclude(g_hud['icon_' + GAME_PROPERTIES.PLANT_TYPES[i]]);
+	//	//g_hud['icon_' + GAME_PROPS.PLANT_TYPES[i]].hide();
+	}
+	for (var i=0;i<GAME_PROPERTIES.ITEM_TYPES.length;i++) {
+		g_hud.setBackpack.exclude(g_hud['icon_' + GAME_PROPERTIES.ITEM_TYPES[i]]);
+		g_hud['icon_' + GAME_PROPERTIES.ITEM_TYPES[i]].hide();
+	}
 
 	for (var i=0;i<GAME_PROPERTIES.BACKPACK_SLOTS;i++) {
 		if (g_playerProps.backpack[i]) {
-			var icon = g_hud['icon_' + g_playerProps.backpack[i].plantType];
+			if(g_playerProps.backpack[i].type === 'plant'){ 
+				var icon = g_hud['icon_' + g_playerProps.backpack[i].plantType];
+			}else if(g_playerProps.backpack[i].type === 'item'){ 
+				console.log("Add item: "+ g_playerProps.backpack[i].itemType);
+				var icon = g_hud['icon_' + g_playerProps.backpack[i].itemType];
+			}
 			icon.attr( { x: g_hud.backpackBackgrounds[i].attrs.x, y: g_hud.backpackBackgrounds[i].attrs.y } );
 			icon.gameProps.loc = 'backpack';
 			icon.gameProps.slot = i;
@@ -141,5 +169,44 @@ function reOrderBackpack() {
 		else {
 			g_hud.backpackCounters[i].attr( { text: '0' } );			
 		}
+	}
+}
+
+function createInventoryIcons(){
+		for (var i=0;i<GAME_PROPERTIES.ITEM_TYPES.length;i++) {
+		var icon = g_hud.raphPaper.image('./assets/items/' + GAME_PROPERTIES.ITEM_TYPES[i] + '.png',0, 0, 64, 64)
+					.attr( { title: GAME_PROPERTIES.ITEM_TYPES[i] } );
+		g_hud['icon_' + GAME_PROPERTIES.ITEM_TYPES[i]] = icon;
+		g_hud.setInvIcons.push(icon);
+		icon.hide();
+		icon.gameProps = {};
+		icon.drag(
+			function(dx, dy) {		// dragging
+				this.attr( { x: this.ox + dx, y: this.oy + dy } );
+			},
+			function() {			// start drag
+				this.toFront();
+				this.ox = this.attrs.x;
+				this.oy = this.attrs.y;
+			},
+			function() {			// end drag
+				for (var j=0;j<g_hud.backpackBackgrounds.length;j++) {
+					var bbox = g_hud.backpackBackgrounds[j].getBBox();
+					if (Raphael.isPointInsideBBox(bbox, this.attrs.x + this.attrs.width/2, this.attrs.y + this.attrs.height/2)) {
+						if (!g_playerProps.backpack[j]) {
+							g_playerProps.backpack[j] = g_playerProps[this.gameProps.loc][this.gameProps.slot];
+							g_playerProps[this.gameProps.loc][this.gameProps.slot] = undefined;
+							this.gameProps.loc = 'backpack';
+							this.gameProps.slot = j;
+							this.attr( { x: bbox.x, y: bbox.y } );
+							reOrderBackpack();
+							return;
+						}
+					}
+				}
+
+				this.attr( { x: this.ox, y: this.oy } );
+			}
+		);
 	}
 }

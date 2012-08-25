@@ -92,25 +92,31 @@ function initCraftyComponents(){
 				.bind('KeyDown', function(e) {
 						if (e.keyCode == Crafty.keys['1']) {
 							g_hud.itemHighlight.attr( { x: g_hud.startX + 64*0 } );
-							g_playerProps.selectedItem = 1;
+							g_playerProps.selectedItem = 0;
+							g_hud.evolveItem(g_playerProps.selectedItem);
 						}
 						else if (e.keyCode == Crafty.keys['2']) {
 							g_hud.itemHighlight.attr( { x: g_hud.startX  + 64*1 } );
-							g_playerProps.selectedItem = 2;
+							g_playerProps.selectedItem = 1;
+							g_hud.evolveItem(g_playerProps.selectedItem);
 						}
 						else if (e.keyCode == Crafty.keys['3']) {
 							g_hud.itemHighlight.attr( { x: g_hud.startX  + 64*2 } );
-							g_playerProps.selectedItem = 31;
+							g_playerProps.selectedItem = 2;
+							g_hud.evolveItem(g_playerProps.selectedItem);
 						}
 						else if (e.keyCode == Crafty.keys['4']) {
 							g_hud.itemHighlight.attr( { x: g_hud.startX  + 64*3 } );
-							g_playerProps.selectedItem = 4;
+							g_playerProps.selectedItem = 3;
+							g_hud.evolveItem(g_playerProps.selectedItem);
 						}
 						else if (e.keyCode == Crafty.keys['5']) {
 							g_hud.itemHighlight.attr( { x: g_hud.startX  + 64*4 } );
-							g_playerProps.selectedItem = 5;
+							g_playerProps.selectedItem = 4;
+							g_hud.evolveItem(g_playerProps.selectedItem);
 						}
 					
+						
 				});
 	}});//end_of_component Player
 		
