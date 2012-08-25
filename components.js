@@ -75,12 +75,36 @@ function initCraftyComponents(){
 							if (speed > maxSpeed) {
 								this.body.SetLinearDamping(5.0);
 							} else if (speed < maxSpeed) {
-								this.body.SetLinearDamping(1.0);
+								this.body.SetLinearDamping(0.5);
 							}
 							
 							//Update spawn coordinates for bullets
 							//this.setBulletSpawnPoint(this.x,this.y);
 				})
+				.onContact("Portal", 
+								function(data){
+
+									destroyAllBodies();
+									//Get the name of the new room from the Portal object
+									var portal = data[0].obj;		
+									console.log("Move to room:"+portal.nextRoom);							
+									Crafty.scene(portal.nextRoom);
+				})
 		}
 	});//end_of_component Player
+	
+	Crafty.c("Portal",{
+		nextRoom: "undeterminedRoom",
+		targetRoom: function(room) {	
+			this.nextRoom = room;
+		 },
+		   
+	});//end_of_component Portal
+}
+
+destroyAllBodies = function()
+{
+	for(var b = world.GetBodyList(); b; b=b.GetNext()) {    
+				world.DestroyBody(b);								
+	}
 }

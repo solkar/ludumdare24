@@ -18,11 +18,73 @@ function initScenes(){
 				[[0,0], [portal_width,0],
 				[portal_width, portal_height], [0, portal_height]]
 		})
+		.targetRoom("dummyRoom");
  		
  		//place player
  		var player =  Crafty.e("Player")
  						.attr({ 
 								x: SCREEN_WIDTH/2, 
+								y: SCREEN_HEIGHT/2
+							});
+ 		
+ 		//Place gun charge chamber
+ 		
+ 		
+	 });
+	 
+	 Crafty.scene("dummyRoom", function () {				
+ 		createRoomWalls();
+ 		
+ 		//Add portals
+ 		var portal_width = 80;
+		var portal_height = 10;
+		var southPortal = Crafty.e("2D, Canvas, Box2D, Portal")
+			.attr({x: SCREEN_WIDTH/2, y: 10})
+			.box2d({
+				bodyType: 'static',
+				density: 1.0,
+				friction: 10,
+				restitution: 0,
+				shape:
+				[[0,0], [portal_width,0],
+				[portal_width, portal_height], [0, portal_height]]
+		})
+		.targetRoom("anotherRoom");
+ 		
+ 		//place player
+ 		var player =  Crafty.e("Player")
+ 						.attr({ 
+								x: SCREEN_WIDTH/2, 
+								y: SCREEN_HEIGHT/2
+							});
+ 		
+ 		//Place gun charge chamber
+ 		
+ 		
+	 });
+	 
+	  Crafty.scene("anotherRoom", function () {				
+ 		createRoomWalls();
+ 		
+ 		//Add portals
+ 		var portal_width = 80;
+		var portal_height = 10;
+		var southPortal = Crafty.e("2D, Canvas, Box2D, Portal")
+			.attr({x: SCREEN_WIDTH/2, y: SCREEN_HEIGHT-20})
+			.box2d({
+				bodyType: 'static',
+				density: 1.0,
+				friction: 10,
+				restitution: 0,
+				shape:
+				[[0,0], [portal_width,0],
+				[portal_width, portal_height], [0, portal_height]]
+		})
+ 		
+ 		//place player
+ 		var player =  Crafty.e("Player")
+ 						.attr({ 
+								x: SCREEN_WIDTH-30, 
 								y: SCREEN_HEIGHT/2
 							});
  		
