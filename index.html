@@ -7,15 +7,33 @@
   <meta name="description" content="for Ludum Dare contest">
   <meta name="author" content="Karlos Zafra, @solkar">
  <!-- <meta name="viewport" content="width=device-width,initial-scale=1"> -->  
-</head>
-<body>	
+	<style>
+			body, html { margin:0; padding: 0; overflow:hidden; font-family:Arial; font-size:20px }
+			#cr-stage { border:2px solid black; margin:5px auto; color:white }
+	</style>
+	<script src="libs/jquery-1.7.2.min.js"></script>
   <script src="libs/Box2dWeb-2.1.a.3.js"></script>  
   <script src="libs/crafty.js"></script>
+  <script src="libs/raphael-min.js"></script>
   <!-- <script src="libs/crafty-min.js"></script> -->
   <script src="libs/box2d.js"></script>
   <script src="sprites.js"></script>
   <script src="components.js"></script>
   <script src="scenes.js"></script>
+  <script src="hud.js"></script>
   <script src="game.js"></script>
+  </head>
+<body>
+  <div id="raphHolder"></div>
+		<!--table align="center" width="800">
+			<tr>
+				<td align="right">move -</td>
+				<td align="left">w a s d</td>
+				<td align="right">action -</td>
+				<td align="left">p</td>
+				<td align="right">cast -</td>
+				<td align="left">1-8</td>
+			</tr>
+		</table-->
 </body>
 </html>

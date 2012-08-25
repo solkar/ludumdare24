@@ -30,7 +30,7 @@ function initScenes(){
  		//Place gun charge chamber
  		var chamber = Crafty.e("Chamber")
  						.attr({
- 							x: SCREEN_WIDTH/3,
+ 							x: SCREEN_WIDTH*0.25,
  							y: SCREEN_HEIGHT*0.25
  						});
  		
