@@ -1,8 +1,12 @@
 var RENDERING_MODE = 'Canvas';
 var GAME_FONT = '"Gorditas", cursive';
-var SCREEN_WIDTH = 640;
-var SCREEN_HEIGHT = 480;
-var	world, PTM_RATIO = 32;
+var SCREEN_WIDTH = 640,
+	SCREEN_HEIGHT = 480,
+	FONT_BLUE_BUBBLE = "http://starmelt.github.com/craftyjstut/img/BlueBubbleFont.png",
+	world, PTM_RATIO = 32;
+
+var ACTIVE_WIDTH = SCREEN_WIDTH,
+	ACTIVE_HEIGHT = SCREEN_HEIGHT*0.75;
 
 var GAME_PROPERTIES = {
 	PLANT_TYPES: 		[ 'tomato', 'potato', 'carrot', 'artichoke', 'pepper', 'zuchini', 'corn'],
@@ -17,11 +21,17 @@ var GAME_PROPERTIES = {
 
 var g_playerProps = {
 	backpack: [],
+	selectedItem: 0,
 };
 
 window.onload = function(){
 	
 	Crafty.init(SCREEN_WIDTH,SCREEN_HEIGHT);
+	
+	Crafty.modules('http://cdn.craftycomponents.com/', { SpriteText: 'dev' }, 
+		function () {
+   		 Crafty.load([FONT_BLUE_BUBBLE]);
+   });
 	
 	Crafty.background("#00ffff");
     Crafty.canvas.init();

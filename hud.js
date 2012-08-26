@@ -44,7 +44,7 @@ function initHUD(){
 	//Print backpack inventory	
 	g_hud.setBackpack = g_hud.raphPaper.set();
 	g_hud.startX = 10;
-	g_hud.startY = SCREEN_HEIGHT - 2*64 - 10;
+	g_hud.startY = SCREEN_HEIGHT - 2*64;
 	for (var i=0;i<GAME_PROPERTIES.BACKPACK_SLOTS;i++) {
 		var elBackground = g_hud.raphPaper.image('./assets/hud/block_sunken.png', g_hud.startX + 64 * (i%5), g_hud.startY + 64 * Math.floor(i/5), 64, 64);
 		var elCounterBack = g_hud.raphPaper.rect(elBackground.attrs.x + 64 - 18, elBackground.attrs.y + 64 - 18, 16, 16, 3)

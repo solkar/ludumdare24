@@ -44,14 +44,16 @@ function initCraftyComponents(){
 	
 	
 	Crafty.c("Player", {
+		_spawnX: ACTIVE_WIDTH*0.5,
+		_spawnY: ACTIVE_HEIGHT*0.5,
 		init: function(){
 			this.addComponent("2D, Canvas, Color, Box2D, Keyboard, PlayerControls")
 			.playerControls(5)
-			.origin("center")
+			//.origin("center")
 			.color("#fff")
 			.attr({ 
-				x: SCREEN_WIDTH/2, 
-				y: SCREEN_HEIGHT/2, 
+				x: ACTIVE_WIDTH*0.5, 
+				y: ACTIVE_HEIGHT*0.5, 
 				h: 64, 
 				w: 64
 			})
@@ -76,9 +78,6 @@ function initCraftyComponents(){
 							} else if (speed < maxSpeed) {
 								this.body.SetLinearDamping(0.5);
 							}
-							
-							//Update spawn coordinates for bullets
-							//this.setBulletSpawnPoint(this.x,this.y);
 				})
 				.onContact("Portal", 
 								function(data){
@@ -115,6 +114,11 @@ function initCraftyComponents(){
 							g_playerProps.selectedItem = 4;
 							g_hud.evolveItem(g_playerProps.selectedItem);
 						}
+						else if(e.keyCode == Crafty.keys['SPACE']){
+							//Trigger "UseItem" event
+							//Crafty.trigger("UseItem",'wool');
+							Crafty.trigger("UseItem",g_playerProps.backpack[g_playerProps.selectedItem].itemType);
+						}
 					
 						
 				});
@@ -126,8 +130,8 @@ function initCraftyComponents(){
 			this.addComponent("2D, Canvas, Color, Box2D")
 			.color("#ff0000")
 			.attr({ 		
- 				x: SCREEN_WIDTH*0.25,
- 				y: SCREEN_HEIGHT*0.25,
+ 				x: ACTIVE_WIDTH*0.25,
+ 				y: ACTIVE_HEIGHT*0.25,
 				h: 64, 
 				w: 64
 			})
@@ -153,6 +157,31 @@ function initCraftyComponents(){
 		 },
 		   
 	});//end_of_component Portal
+	
+	Crafty.c("ShoutBox",{
+		printShoutBox: function(text)
+		{
+			this.text = text;
+			
+			var textSize = 16,
+        	initX = 250,
+            initY = 36;
+            var component;
+                        			
+			for(var i=0;i<this.text.length;i++){
+				component = Crafty.e("2D, Canvas, SpriteText")
+			 	.attr({x: initX, y: initY+5+i*textSize, w: this.text[i].length*textSize, h: textSize})
+				.registerFont("BlueBubble", textSize, FONT_BLUE_BUBBLE)
+				.text(this.text[i])
+				.delay(function() {
+	             	//this.text("...");
+					}, 2000)
+						
+			}
+			
+			return component;
+		}
+	});
 }
 
 destroyAllBodies = function()
