@@ -12,7 +12,7 @@ var GAME_PROPERTIES = {
 	PLANT_TYPES: 		[ 'tomato', 'potato', 'carrot', 'artichoke', 'pepper', 'zuchini', 'corn'],
 	BACKPACK_SLOTS:		5,
 	MAX_SPELLS:			8,
-	ITEM_TYPES: ['sheep','wool','jersey']
+	ITEM_TYPES: ['sheep','wool','jersey','log','plank','guitar']
 //	{
 //		wolf: ['sheep','wool','jersey'],
 //		door: ['ore', 'iron', 'key']
@@ -46,16 +46,24 @@ window.onload = function(){
 	
 	initHUD();
 	
-	testInventory();
-	pushWolfItem();
+	//pushWolfItem();
 	//Load first scene
 	console.log("Run scene:main")
 	Crafty.scene("main");
 }
 
-function testInventory(){
+function pushWolfItem(){
+	for (var i=0; i<GAME_PROPERTIES.BACKPACK_SLOTS;i++){
+		if(!g_playerProps.backpack[i]){
+			g_playerProps.backpack[i] = { type: 'item', itemType: GAME_PROPERTIES.ITEM_TYPES[0], count: 1 };
+			reOrderBackpack();
+			return;
+		}
+	}
+}
 
-	var icon = g_hud['icon_' + GAME_PROPERTIES.PLANT_TYPES[1]];
+function addItemToBackpack(itemName){
+	var icon = g_hud['icon_' + itemName];
 	//Check if this item is the invenory to increase the counter
 	if (icon.gameProps.loc) { 
 		g_playerProps[icon.gameProps.loc][icon.gameProps.slot].count++;
@@ -63,23 +71,11 @@ function testInventory(){
 			reOrderBackpack();
 			return;								
 	}
-
-	// put it in inventory
-	for (var i=0;i<GAME_PROPERTIES.BACKPACK_SLOTS;i++) {
-		if (!g_playerProps.backpack[i]) {
-			g_playerProps.backpack[i] = { type: 'plant', plantType: GAME_PROPERTIES.PLANT_TYPES[1], count: 1 };
-			//plants[0].obj.destroy();
-			reOrderBackpack();
-			return;
-		}
-	}
-	alert ('pack full');
-}
-
-function pushWolfItem(){
+	
+	
 	for (var i=0; i<GAME_PROPERTIES.BACKPACK_SLOTS;i++){
 		if(!g_playerProps.backpack[i]){
-			g_playerProps.backpack[i] = { type: 'item', itemType: GAME_PROPERTIES.ITEM_TYPES[0], count: 1 };
+			g_playerProps.backpack[i] = { type: 'item', itemType: itemName, count: 1 };
 			reOrderBackpack();
 			return;
 		}

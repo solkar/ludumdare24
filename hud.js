@@ -107,20 +107,35 @@ function initHUD(){
 	g_hud.visible = true;
 	g_hud.setBackpack.attr( { opacity: 1.0 });
 
-	g_hud.evolveItem = function(itemId){
-		if (g_playerProps.backpack[itemId]) {
+//	g_hud.evolveItem = function(itemId){
+//		if (g_playerProps.backpack[itemId]) {
+//			if(g_playerProps.backpack[itemId].type === 'item'){
+//				
+//				var newItemType = GAME_PROPERTIES.ITEM_TYPES.indexOf(g_playerProps.backpack[itemId].itemType) + 1;
+//				if(newItemType == 3){
+//					newItemType = 0;
+//				}
+//				g_playerProps.backpack[itemId] = { type: 'item', itemType: GAME_PROPERTIES.ITEM_TYPES[newItemType], count: 1 };
+//				reOrderBackpack();
+//				
+//			}
+//		}
+//	}		
+}
+
+function evolveItem(itemId){
+			if (g_playerProps.backpack[itemId]) {
 			if(g_playerProps.backpack[itemId].type === 'item'){
 				
 				var newItemType = GAME_PROPERTIES.ITEM_TYPES.indexOf(g_playerProps.backpack[itemId].itemType) + 1;
-				if(newItemType == 3){
-					newItemType = 0;
+				if(newItemType % 3 == 0){
+					newItemType = newItemType - 3;
 				}
 				g_playerProps.backpack[itemId] = { type: 'item', itemType: GAME_PROPERTIES.ITEM_TYPES[newItemType], count: 1 };
 				reOrderBackpack();
 				
 			}
 		}
-	}		
 }
 
 // fix for Webkit browsers too fast
